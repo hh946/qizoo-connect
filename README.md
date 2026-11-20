@@ -4,11 +4,11 @@ Get a notification from your computer AI on Apple Watch, answer an approval requ
 
 ## Connect with one message
 
-On Apple Watch, open Qizoo and tap **Connect your computer AI** (shown as **连接电脑上的 AI** in the current build) to get a short-lived pairing code. Replace `[CODE]` and paste this into your own computer AI session:
+Paste this into your own computer AI session:
 
-> Follow the Qizoo setup guide at https://qizoo.tipuu.com/agent-setup.md to connect my Apple Watch. My watch pairing code is [CODE]. After I confirm on the official website, send a test request with one choice, “Received,” and retrieve my reply using the original request ID. Use `--campaign github` when running the pairing command.
+> Help me connect Qizoo to my Apple Watch. Follow https://qizoo.tipuu.com/agent-setup.md to install or reuse the CLI, ask me for my watch connection code when needed, and use `--campaign github`. If watch confirmation is available, give me the computer verification code so I can approve it on my watch. Ask me before using browser confirmation. Send a test request and retrieve my reply using the original request ID.
 
-You’ll confirm the link yourself on the official Qizoo website. Open it, sign in and enter the separate computer verification code shown by the CLI. Keep both codes out of public chats and issues.
+With Qizoo Watch preview build 53 and the matching relay, use the [CLI v0.2.0rc1 prerelease](https://github.com/hh946/qizoo-connect/releases/tag/v0.2.0rc1) to confirm on the watch without signing in. For Watch build 52, use [CLI v0.1.1 stable](https://github.com/hh946/qizoo-connect/releases/tag/v0.1.1) and confirm in the browser. Keep both codes out of public chats and issues.
 
 Use the [setup guide](docs/agent-setup.md) for the CLI download and checksum verification. The initial CLI target is an Apple silicon Mac with Codex desktop or Codex CLI. The Apple Watch App Store listing has yet to be published. To run the full flow you need an installed Qizoo Watch build.
 
@@ -16,6 +16,8 @@ Use the [setup guide](docs/agent-setup.md) for the CLI download and checksum ver
 
 ## 中文快速接入
 
-在启奏手表点「连接电脑上的 AI」，将下方的 `[配对码]` 替换为手表显示的临时码，再发给你正在使用的电脑 AI：
+把下面这句话发给正在使用的电脑 AI：
 
-> 按 https://qizoo.tipuu.com/agent-setup.md 连接我的启奏手表。手表配对码是 [配对码]。我在启奏官网登录并核对电脑验证码后，请发送只有「收到」一个选项的测试请示，并按原请求编号取回我的答复。配对命令请使用 `--campaign github`。
+> 请按 https://qizoo.tipuu.com/agent-setup.md 安装或复用启奏 CLI，需要时向我索取手表连接码，连接时使用 `--campaign github`。如果支持在手表上确认，请把电脑校验码告诉我，我会在表上核对并确认。若需网页确认，请先问我。连接好后请发送一条测试请示，按原请求编号取回我的答复。
+
+手表预览第 53 版配合 CLI v0.2.0rc1 在表上确认，第 52 版配合 CLI v0.1.1 在账号网页确认。启奏手表 App Store 版尚未上架。

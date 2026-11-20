@@ -2,8 +2,8 @@
   "openapi": "3.1.0",
   "info": {
     "title": "启奏手表简易接入",
-    "version": "0.1.1",
-    "description": "路径相对于部署方提供的中继 HTTPS 根地址。账号确认页面采用 verification_uri，仅在可信账号站点打开。CLI 可为该确认页附加可选 utm_source，仅在成功确认后供渠道汇总使用。"
+    "version": "0.2.0",
+    "description": "路径相对于部署方提供的中继 HTTPS 根地址。账号确认页面采用 verification_uri，仅在可信账号站点打开。CLI 可为该确认页附加可选 utm_source，仅在成功确认后供渠道汇总使用。 免账号配对使用 /watch-connect/direct，由手表核对电脑并确认。公告接口独立可读，无公告时返回 null。"
   },
   "paths": {
     "/watch-connect/start": {
@@ -298,6 +298,315 @@
           }
         ]
       }
+    },
+    "/watch-connect/direct/start": {
+      "post": {
+        "summary": "手表申请免账号配对码",
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DirectWatch"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WatchChallenge"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "请求失败。以 HTTP 状态及服务端错误信息为准。"
+          }
+        }
+      }
+    },
+    "/watch-connect/direct/poll": {
+      "post": {
+        "summary": "手表查询进度及电脑校验码",
+        "security": [
+          {
+            "Poll": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "maxProperties": 0
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DirectWatchStatus"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "请求失败。以 HTTP 状态及服务端错误信息为准。"
+          }
+        }
+      },
+      "delete": {
+        "summary": "手表取消待确认配对",
+        "security": [
+          {
+            "Poll": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DirectWatchStatus"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "请求失败。以 HTTP 状态及服务端错误信息为准。"
+          }
+        }
+      }
+    },
+    "/watch-connect/direct/confirm": {
+      "post": {
+        "summary": "手表确认当前配对",
+        "security": [
+          {
+            "Poll": []
+          }
+        ],
+        "description": "仅使用手表收到的轮询凭据确认，校验码须与当前尝试完全匹配。已确认请求可重试。",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DirectWatchConfirmation"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DirectWatchStatus"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "请求失败。以 HTTP 状态及服务端错误信息为准。"
+          }
+        }
+      }
+    },
+    "/watch-connect/direct/desktop/start": {
+      "post": {
+        "summary": "电脑认领一次性码并获取校验码",
+        "security": [],
+        "description": "用相同轮询凭据和请求字段重试可以恢复同一个校验码。",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DirectDesktop"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DirectDesktopChallenge"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "请求失败。以 HTTP 状态及服务端错误信息为准。"
+          }
+        }
+      }
+    },
+    "/watch-connect/direct/desktop/poll": {
+      "post": {
+        "summary": "电脑查询表上确认进度和链接凭据",
+        "security": [
+          {
+            "Poll": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "maxProperties": 0
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DirectDesktopStatus"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "请求失败。以 HTTP 状态及服务端错误信息为准。"
+          }
+        }
+      },
+      "delete": {
+        "summary": "电脑取消待确认配对",
+        "security": [
+          {
+            "Poll": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DirectDesktopStatus"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "请求失败。以 HTTP 状态及服务端错误信息为准。"
+          }
+        }
+      }
+    },
+    "/watch-connect/direct/desktops": {
+      "get": {
+        "summary": "手表列出连接到自己的电脑",
+        "security": [
+          {
+            "WatchDevice": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DirectDesktopList"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "请求失败。以 HTTP 状态及服务端错误信息为准。"
+          }
+        }
+      }
+    },
+    "/watch-connect/direct/desktops/{device_id}": {
+      "parameters": [
+        {
+          "name": "device_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "delete": {
+        "summary": "手表撤销连接到自己的电脑",
+        "security": [
+          {
+            "WatchDevice": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DirectDesktopRevocation"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "请求失败。以 HTTP 状态及服务端错误信息为准。"
+          }
+        }
+      }
+    },
+    "/watch-connect/service": {
+      "get": {
+        "summary": "读取当前服务公告",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceInfo"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "请求失败。以 HTTP 状态及服务端错误信息为准。"
+          }
+        },
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "description": "可选 en 或 zh 语言偏好；无匹配时使用默认文案。"
+          }
+        ]
+      }
     }
   },
   "components": {
@@ -311,6 +620,11 @@
         "type": "http",
         "scheme": "bearer",
         "description": "用户已确认的本机设备凭据"
+      },
+      "WatchDevice": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "已配对手表的收件箱设备凭据"
       }
     },
     "schemas": {
@@ -564,6 +878,264 @@
         "required": [
           "id",
           "status"
+        ]
+      },
+      "DirectWatch": {
+        "type": "object",
+        "properties": {
+          "reuse_existing": {
+            "type": "boolean",
+            "description": "已有空间归属的手表传 true，沿用原凭据、空间、历史与推送。"
+          },
+          "installation_id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{16,200}$"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "device_token": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{43,128}$",
+            "writeOnly": true
+          }
+        },
+        "required": [
+          "installation_id",
+          "name",
+          "device_token"
+        ]
+      },
+      "DirectDesktop": {
+        "type": "object",
+        "properties": {
+          "installation_id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{16,200}$"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "user_code": {
+            "type": "string"
+          },
+          "poll_token": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{43,128}$",
+            "writeOnly": true,
+            "description": "电脑为本次尝试生成的独立高强度随机值。响应丢失时用相同参数重试。"
+          },
+          "utm_source": {
+            "type": "string",
+            "description": "可选渠道标记，仅在成功确认后记录。"
+          }
+        },
+        "required": [
+          "installation_id",
+          "name",
+          "user_code",
+          "poll_token"
+        ]
+      },
+      "DirectDesktopChallenge": {
+        "type": "object",
+        "properties": {
+          "verification_code": {
+            "type": "string",
+            "pattern": "^[0-9]{6}$"
+          },
+          "expires_at": {
+            "type": "integer",
+            "description": "Unix time in seconds"
+          },
+          "interval": {
+            "type": "integer",
+            "minimum": 1
+          }
+        },
+        "required": [
+          "verification_code",
+          "expires_at",
+          "interval"
+        ]
+      },
+      "DirectWatchConfirmation": {
+        "type": "object",
+        "properties": {
+          "verification_code": {
+            "type": "string",
+            "pattern": "^[0-9]{6}$"
+          }
+        },
+        "required": [
+          "verification_code"
+        ]
+      },
+      "DirectWatchStatus": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "connected",
+              "expired",
+              "cancelled",
+              "awaiting_confirmation"
+            ]
+          },
+          "device_id": {
+            "type": "string"
+          },
+          "space_id": {
+            "type": "string"
+          },
+          "desktop_name": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "verification_code": {
+            "type": "string",
+            "pattern": "^[0-9]{6}$"
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "DirectDesktopStatus": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "connected",
+              "expired",
+              "cancelled"
+            ]
+          },
+          "device_id": {
+            "type": "string"
+          },
+          "space_id": {
+            "type": "string"
+          },
+          "device_token": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{43,128}$",
+            "description": "仅已确认后的电脑 POST 轮询返回。凭据仅限本链接，请存入本机受保护的存储。"
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "DirectDesktopList": {
+        "type": "object",
+        "properties": {
+          "devices": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "device_id": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "name": {
+                  "type": "string",
+                  "maxLength": 100
+                },
+                "created_at": {
+                  "type": "integer",
+                  "description": "Unix time in seconds"
+                }
+              },
+              "required": [
+                "device_id",
+                "name",
+                "created_at"
+              ]
+            }
+          }
+        },
+        "required": [
+          "devices"
+        ]
+      },
+      "DirectDesktopRevocation": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "const": true
+          }
+        },
+        "required": [
+          "ok"
+        ]
+      },
+      "ServiceAnnouncement": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "body": {
+            "type": "string",
+            "maxLength": 2000
+          },
+          "effective_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "UTC，精确到秒。"
+          },
+          "free_quota": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 2147483647
+          },
+          "action_label": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "action_url": {
+            "type": "string",
+            "format": "uri",
+            "pattern": "^https://"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "body"
+        ]
+      },
+      "ServiceInfo": {
+        "type": "object",
+        "properties": {
+          "announcement": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ServiceAnnouncement"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "announcement"
         ]
       }
     }
