@@ -1,0 +1,571 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "启奏手表简易接入",
+    "version": "0.1.1",
+    "description": "路径相对于部署方提供的中继 HTTPS 根地址。账号确认页面采用 verification_uri，仅在可信账号站点打开。CLI 可为该确认页附加可选 utm_source，仅在成功确认后供渠道汇总使用。"
+  },
+  "paths": {
+    "/watch-connect/start": {
+      "post": {
+        "summary": "手表申请一次性码",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WatchChallenge"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "请求失败。以 HTTP 状态及服务端错误信息为准。"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Watch"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/watch-connect/poll": {
+      "post": {
+        "summary": "手表查询认领进度",
+        "security": [
+          {
+            "Poll": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PairingStatus"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "请求失败。以 HTTP 状态及服务端错误信息为准。"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "maxProperties": 0
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "使用原轮询凭据取消待确认绑定",
+        "security": [
+          {
+            "Poll": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PairingStatus"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "请求失败。以 HTTP 状态及服务端错误信息为准。"
+          }
+        }
+      }
+    },
+    "/watch-connect/desktop/start": {
+      "post": {
+        "summary": "电脑用手表码申请浏览器确认",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ComputerChallenge"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "请求失败。以 HTTP 状态及服务端错误信息为准。"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Computer"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/watch-connect/desktop/poll": {
+      "post": {
+        "summary": "电脑查询浏览器认领进度",
+        "security": [
+          {
+            "Poll": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PairingStatus"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "请求失败。以 HTTP 状态及服务端错误信息为准。"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "maxProperties": 0
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "使用原轮询凭据取消待确认绑定",
+        "security": [
+          {
+            "Poll": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PairingStatus"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "请求失败。以 HTTP 状态及服务端错误信息为准。"
+          }
+        }
+      }
+    },
+    "/watch-connect/desktop/status": {
+      "get": {
+        "summary": "检查当前电脑连接",
+        "security": [
+          {
+            "Computer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Connection"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "请求失败。以 HTTP 状态及服务端错误信息为准。"
+          }
+        }
+      }
+    },
+    "/watch-connect/desktop": {
+      "delete": {
+        "summary": "撤销当前电脑连接",
+        "security": [
+          {
+            "Computer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功"
+          },
+          "default": {
+            "description": "请求失败。以 HTTP 状态及服务端错误信息为准。"
+          }
+        }
+      }
+    },
+    "/messages": {
+      "post": {
+        "summary": "以固定编号发送提醒或请示",
+        "security": [
+          {
+            "Computer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Receipt"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "请求失败。以 HTTP 状态及服务端错误信息为准。"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Message"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/replies/{id}": {
+      "get": {
+        "summary": "按发起时的编号查询答复",
+        "security": [
+          {
+            "Computer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Result"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "请求失败。以 HTTP 状态及服务端错误信息为准。"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "Poll": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "本次绑定的轮询凭据"
+      },
+      "Computer": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "用户已确认的本机设备凭据"
+      }
+    },
+    "schemas": {
+      "Watch": {
+        "type": "object",
+        "properties": {
+          "reuse_existing": {
+            "type": "boolean",
+            "description": "已有连接的手表传 true，要求沿用原设备身份。须由原空间所属账号在浏览器确认。"
+          },
+          "installation_id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{16,200}$"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "device_token": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{43,128}$",
+            "writeOnly": true
+          }
+        },
+        "required": [
+          "installation_id",
+          "name",
+          "device_token"
+        ]
+      },
+      "Computer": {
+        "type": "object",
+        "properties": {
+          "installation_id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{16,200}$"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "device_token": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{43,128}$",
+            "writeOnly": true
+          },
+          "user_code": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "installation_id",
+          "name",
+          "device_token",
+          "user_code"
+        ]
+      },
+      "WatchChallenge": {
+        "type": "object",
+        "properties": {
+          "reused_device": {
+            "type": "boolean",
+            "description": "显式复用已有身份的请求成功时返回 true。手表收到该值后才展示这次配对码。"
+          },
+          "poll_token": {
+            "type": "string"
+          },
+          "expires_at": {
+            "type": "integer",
+            "description": "Unix time in seconds"
+          },
+          "interval": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "user_code": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "poll_token",
+          "expires_at",
+          "interval",
+          "user_code"
+        ]
+      },
+      "ComputerChallenge": {
+        "type": "object",
+        "properties": {
+          "poll_token": {
+            "type": "string"
+          },
+          "expires_at": {
+            "type": "integer",
+            "description": "Unix time in seconds"
+          },
+          "interval": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "browser_code": {
+            "type": "string"
+          },
+          "verification_uri": {
+            "type": "string",
+            "format": "uri"
+          }
+        },
+        "required": [
+          "poll_token",
+          "expires_at",
+          "interval",
+          "browser_code",
+          "verification_uri"
+        ]
+      },
+      "PairingStatus": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "connected",
+              "expired",
+              "cancelled"
+            ]
+          },
+          "device_id": {
+            "type": "string"
+          },
+          "space_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "Connection": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "connected"
+            ]
+          },
+          "device_id": {
+            "type": "string"
+          },
+          "space_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "status",
+          "device_id",
+          "space_id"
+        ]
+      },
+      "Message": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "ask",
+              "notify"
+            ]
+          },
+          "task": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "expires_in": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 86400,
+            "description": "请示有效秒数。超时重试沿用首次发送的编号及内容。"
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "task",
+          "body"
+        ]
+      },
+      "Receipt": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "Result": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "answered",
+              "expired",
+              "cancelled"
+            ]
+          },
+          "reply": {
+            "type": "object",
+            "properties": {
+              "choice": {
+                "type": "string"
+              },
+              "text": {
+                "type": "string"
+              }
+            },
+            "required": []
+          }
+        },
+        "required": [
+          "id",
+          "status"
+        ]
+      }
+    }
+  }
+}
