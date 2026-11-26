@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.0
+
+- Watch confirmation is the default pairing flow for Qizoo on the App Store. No account or sign-up is needed.
+- `ask --image <option>=<https-url>` shows an image with an answer option on the watch.
+- `connect --code` replaces an existing connection and keeps a backup of the old one.
+- Accept `reddit`, `indie-hackers`, `newsletter` and `discord` as `--campaign` values.
+
 ## 0.2.0rc1 — prerelease
 
 - Add sign-in-free pairing with confirmation on Qizoo Watch preview build 53 and the matching relay. The connection code and polling credential stay in memory. The CLI saves the revocable device credential after watch approval.

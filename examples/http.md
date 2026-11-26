@@ -2,9 +2,9 @@
 
 Hosts that make HTTPS requests and securely store credentials can use the [public API definition](../openapi.json).
 
-## Watch confirmation with build 53
+## Watch confirmation
 
-This flow requires Qizoo Watch preview build 53 and the matching relay on `https://qizoo.tipuu.com`, or the equivalent relay in a test environment.
+This is the flow for the App Store version of Qizoo for Apple Watch, using `https://qizoo.tipuu.com` or the equivalent relay in a test environment.
 
 1. Generate an installation UUID and a separate random polling credential of at least 32 bytes. Keep the polling credential and watch connection code in memory.
 2. Call `POST /watch-connect/direct/desktop/start` with `user_code`, `name`, `installation_id`, and `poll_token`. Retry an uncertain start with the same payload.
@@ -12,7 +12,7 @@ This flow requires Qizoo Watch preview build 53 and the matching relay on `https
 4. Send `{}` to `POST /watch-connect/direct/desktop/poll`, using `poll_token` as the Bearer credential. Follow the returned `interval` and back off on throttling or network failures. Use `DELETE` on the same path to cancel a pending connection. Ask for a new watch code if the attempt expires or is cancelled.
 5. On `connected`, save the returned `device_token` in the current user's protected storage. Use it for notification, approval, reply and revocation calls.
 
-## Browser confirmation with build 52
+## Browser confirmation for older preview builds
 
 1. Generate an installation UUID and a random secret of at least 32 bytes. Save both in the current user’s protected storage.
 2. Call `POST /watch-connect/desktop/start` with the watch pairing code as `user_code`, along with `name`, `installation_id`, and `device_token`.
