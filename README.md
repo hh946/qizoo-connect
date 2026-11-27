@@ -17,7 +17,7 @@ This repository holds the public setup guide, the CLI downloads and the API defi
 
 Keep connection codes out of public chats and issues.
 
-[Agent setup](docs/agent-setup.md) · [Notifications and approvals](docs/approvals.md) · [HTTP example](examples/http.md) · [API definition](openapi.json) · [Changelog](CHANGELOG.md)
+[Codex and Claude Code guide](docs/codex-claude-apple-watch.md) · [Agent setup](docs/agent-setup.md) · [Notifications and approvals](docs/approvals.md) · [HTTP example](examples/http.md) · [API definition](openapi.json) · [Changelog](CHANGELOG.md)
 
 ## Privacy and security
 
